@@ -19,7 +19,7 @@ st.set_page_config(page_title="Fleet Management System", layout="wide")
 # Database setup optimized for Streamlit Cloud
 db_dir = 'data'
 os.makedirs(db_dir, exist_ok=True)
-db_path = os.path.join(db_dir, 'fleet.db')
+db_path = os.path.join(db_dir, 'fleet1.db')
 db_uri = f'sqlite:///{db_path}'
 
 # Initialize SQLAlchemy
