@@ -1,0 +1,8 @@
+streamlit
+streamlit-option-menu
+sqlalchemy
+pandas
+seaborn
+matplotlib
+passlib
+xlsxwriter
