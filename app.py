@@ -225,7 +225,7 @@ def main():
         # Rest of the application code remains unchanged
         # [Dashboard, Vehicles, Drivers, Assignments, Compliance, Maintenance, Reports]
         # ... (same as original file content) ...
-                if selected == "Dashboard":
+        if selected == "Dashboard":
             st.header("Dashboard")
             vehicle_count, driver_count, assignment_count, maintenance_due, compliance_issues, max_counts = get_dashboard_counts()
             
