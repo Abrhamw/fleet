@@ -1,6 +1,6 @@
 ﻿import os
 import streamlit as st
-from streamlit_option_menu import option_menu
+#from streamlit_option_menu import option_menu
 import sqlite3
 from sqlalchemy import create_engine, Enum, func, and_, or_, Column, String, Integer, Float, Date, Text, ForeignKey
 from sqlalchemy.orm import sessionmaker, scoped_session, relationship
