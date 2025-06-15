@@ -1,0 +1,166 @@
+﻿{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h1>Vehicle Report: <span class="plate-badge">{{ vehicle.plate_number }}</span></h1>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <h3><i class="bi bi-car-front"></i> Basic Information</h3>
+                    <table class="table">
+                        <tr>
+                            <th>Plate Number:</th>
+                            <td><span class="badge bg-dark plate-badge">{{ vehicle.plate_number }}</span></td>
+                        </tr>
+                        <tr>
+                            <th>Chasis Number:</th>
+                            <td>{{ vehicle.chasis }}</td>
+                        </tr>
+                        <tr>
+                            <th>Type:</th>
+                            <td>{{ vehicle.vehicle_type }}</td>
+                        </tr>
+                        <tr>
+                            <th>Make/Model:</th>
+                            <td>{{ vehicle.make }} {{ vehicle.model }}</td>
+                        </tr>
+                        <tr>
+                            <th>Year:</th>
+                            <td>{{ vehicle.year }}</td>
+                        </tr>
+                        <tr>
+                            <th>Fuel:</th>
+                            <td>{{ vehicle.fuel_type }}</td>
+                        </tr>
+                        <tr>
+                            <th>Fuel Capacity:</th>
+                            <td>{{ vehicle.fuel_capacity }} Ltrs</td>
+                        </tr>
+                        <tr>
+                            <th>Fuel Consumption:</th>
+                            <td>{{ vehicle.fuel_consumption }} Km/Ltr</td>
+                        </tr>
+                        <tr>
+                            <th>Loading Capacity:</th>
+                            <td>{{ vehicle.loading_capacity }}</td>
+                        </tr>
+                        <tr>
+                            <th>Assigned For:</th>
+                            <td>{{ vehicle.assigned_for }}</td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div class="col-md-6">
+                    {% if vehicle.compliance %}
+                    <h3><i class="bi bi-clipboard-check"></i> Compliance</h3>
+                    <table class="table">
+                        <tr>
+                            <th>Insurance:</th>
+                            <td>{{ vehicle.compliance.insurance_type }} ({{ vehicle.compliance.insurance_date }})</td>
+                        </tr>
+                        <tr>
+                            <th>Yearly Inspection:</th>
+                            <td>{{ vehicle.compliance.yearly_inspection }} ({{ vehicle.compliance.inspection_date }})</td>
+                        </tr>
+                        <tr>
+                            <th>Safety Audit:</th>
+                            <td>{{ vehicle.compliance.safety_audit }}</td>
+                        </tr>
+                        <tr>
+                            <th>Utilization History:</th>
+                            <td>{{ vehicle.compliance.utilization_history }}</td>
+                        </tr>
+                        <tr>
+                            <th>Accident History:</th>
+                            <td>{{ vehicle.compliance.accident_history }}</td>
+                        </tr>
+                    </table>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <h3><i class="bi bi-tools"></i> Maintenance Records</h3>
+                    {% if vehicle.maintenance %}
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Last Service</th>
+                                    <th>Next Service</th>
+                                    <th>Center</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for record in vehicle.maintenance %}
+                                <tr>
+                                    <td>{{ record.last_service_date }} ({{ record.last_service_km }} km)</td>
+                                    <td>{{ record.next_service_date }} ({{ record.next_service_km }} km)</td>
+                                    <td>{{ record.maintenance_center }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="alert alert-warning">No maintenance records</div>
+                    {% endif %}
+                </div>
+                
+                <div class="col-md-6">
+                    <h3><i class="bi bi-geo-alt"></i> Current Assignment</h3>
+                    {% if vehicle.assignments %}
+                        {% set current_assignment = vehicle.assignments|selectattr('end_date', 'none')|first %}
+                        {% if current_assignment %}
+                        <table class="table">
+                            <tr>
+                                <th>Driver:</th>
+                                <td>{{ current_assignment.driver.name }} (ID: {{ current_assignment.driver.id_number }})</td>
+                            </tr>
+                            <tr>
+                                <th>Work Place:</th>
+                                <td>{{ current_assignment.work_place }}</td>
+                            </tr>
+                            <tr>
+                                <th>Start Date:</th>
+                                <td>{{ current_assignment.start_date }}</td>
+                            </tr>
+                            <tr>
+                                <th>GPS Position:</th>
+                                <td>{{ current_assignment.gps_position }}</td>
+                            </tr>
+                            <tr>
+                                <th>Geofence Violations:</th>
+                                <td>
+                                    <span class="badge bg-{{ 'danger' if current_assignment.geofence_violations > 0 else 'success' }}">
+                                        {{ current_assignment.geofence_violations }}
+                                    </span>
+                                </td>
+                            </tr>
+                        </table>
+                        {% else %}
+                        <div class="alert alert-info">No current assignment</div>
+                        {% endif %}
+                    {% else %}
+                    <div class="alert alert-info">No assignment records</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="text-center">
+        <a href="/report" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Back to Reports
+        </a>
+        <button class="btn btn-primary" onclick="window.print()">
+            <i class="bi bi-printer"></i> Print Report
+        </button>
+    </div>
+</div>
+{% endblock %}

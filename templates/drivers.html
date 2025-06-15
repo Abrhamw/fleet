@@ -1,0 +1,95 @@
+﻿{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1><i class="bi bi-people"></i> Driver Management</h1>
+        <a href="/drivers" class="btn btn-primary">
+            <i class="bi bi-person-plus"></i> Add New Driver
+        </a>
+    </div>
+
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h5>Add New Driver</h5>
+        </div>
+        <div class="card-body">
+            <form method="POST">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Full Name <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" name="name" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">ID Number <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" name="id_number" required>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label class="form-label">Phone (+251...) <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <span class="input-group-text">+251</span>
+                            <input type="text" class="form-control" name="phone" placeholder="XX XXX XXXX" required>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label class="form-label">Reporting To</label>
+                        <input type="text" class="form-control" name="reporting_to">
+                    </div>
+                    
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-success">
+                            <i class="bi bi-save"></i> Save Driver
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card mt-4">
+        <div class="card-header bg-secondary text-white">
+            <h5>Driver List</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Name</th>
+                            <th>ID Number</th>
+                            <th>Phone</th>
+                            <th>Reporting To</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for driver in drivers %}
+                        <tr>
+                            <td>{{ driver.name }}</td>
+                            <td>{{ driver.id_number }}</td>
+                            <td>{{ driver.phone }}</td>
+                            <td>{{ driver.reporting_to }}</td>
+                            <td class="action-btns">
+                                <a href="/drivers/{{ driver.id }}" class="btn btn-sm btn-primary">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <a href="/drivers/delete/{{ driver.id }}" class="btn btn-sm btn-danger" 
+                                   onclick="return confirm('Are you sure?')">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="5" class="text-center">No drivers found</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

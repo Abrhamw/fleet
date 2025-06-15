@@ -1,0 +1,54 @@
+﻿{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h1>Unassigned Vehicles Report</h1>
+            <p class="mb-0">Generated on {{ now.strftime('%Y-%m-%d %H:%M') }}</p>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Plate Number</th>
+                            <th>Make/Model</th>
+                            <th>Type</th>
+                            <th>Assigned For</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for vehicle in vehicles %}
+                        <tr>
+                            <td>{{ vehicle.plate_number }}</td>
+                            <td>{{ vehicle.make }} {{ vehicle.model }}</td>
+                            <td>{{ vehicle.vehicle_type }}</td>
+                            <td>{{ vehicle.assigned_for }}</td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="4" class="text-center">All vehicles are currently assigned</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            
+<div class="mt-4">
+    <a href="{{ url_for('generate_report') }}" class="btn btn-secondary">
+        <i class="bi bi-arrow-left"></i> Back to Reports
+    </a>
+    <button class="btn btn-primary" onclick="window.print()">
+        <i class="bi bi-printer"></i> Print Report
+    </button>
+    <a href="{{ url_for('export_unassigned_vehicles') }}" class="btn btn-success">
+        <i class="bi bi-file-excel"></i> Export to Excel
+    </a>
+</div>
+			
+			
+        </div>
+    </div>
+</div>
+{% endblock %}

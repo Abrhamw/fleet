@@ -1,0 +1,67 @@
+﻿{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h1>Assignment Summary Report</h1>
+            <p class="mb-0">Generated on {{ now.strftime('%Y-%m-%d %H:%M') }}</p>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card text-white bg-success mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Ongoing Assignments</h5>
+                            <h1 class="card-text">{{ ongoing_assignments }}</h1>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card text-white bg-warning mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Unassigned Vehicles</h5>
+                            <h1 class="card-text">{{ unassigned_vehicles }}</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <h3 class="mt-4">Vehicles by Assignment Type</h3>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Assignment Type</th>
+                            <th>Vehicle Count</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for type, count in assignment_counts %}
+                        <tr>
+                            <td>{{ type }}</td>
+                            <td>{{ count }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="mt-4">
+                <a href="{{ url_for('generate_report') }}" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i> Back to Reports
+                </a>
+                <button class="btn btn-primary" onclick="window.print()">
+                    <i class="bi bi-printer"></i> Print Report
+                </button>
+				    <a href="{{ url_for('export_assignment_summary') }}" class="btn btn-success">
+        <i class="bi bi-file-excel"></i> Export to Excel
+    </a>
+            </div>
+			
+			
+			
+        </div>
+    </div>
+</div>
+{% endblock %}

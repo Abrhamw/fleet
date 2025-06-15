@@ -1,0 +1,59 @@
+﻿{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h1>Driver Assignments Report</h1>
+            <p class="mb-0">Generated on {{ now.strftime('%Y-%m-%d %H:%M') }}</p>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Driver Name</th>
+                            <th>ID Number</th>
+                            <th>Assigned Vehicle</th>
+                            <th>Work Place</th>
+                            <th>Start Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for driver, assignment in drivers %}
+                        <tr>
+                            <td>{{ driver.name }}</td>
+                            <td>{{ driver.id_number }}</td>
+                            <td>
+                                {% if assignment %}
+                                    {{ assignment.vehicle.plate_number }} ({{ assignment.vehicle.make }})
+                                {% else %}
+                                    Not assigned
+                                {% endif %}
+                            </td>
+                            <td>{{ assignment.work_place if assignment else '-' }}</td>
+                            <td>{{ assignment.start_date if assignment else '-' }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="mt-4">
+                <a href="{{ url_for('generate_report') }}" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i> Back to Reports
+                </a>
+                <button class="btn btn-primary" onclick="window.print()">
+                    <i class="bi bi-printer"></i> Print Report
+                </button>
+				    <a href="{{ url_for('export_driver_assignments') }}" class="btn btn-success">
+        <i class="bi bi-file-excel"></i> Export to Excel
+    </a>
+            </div>
+			
+
+			
+        </div>
+    </div>
+</div>
+{% endblock %}

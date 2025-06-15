@@ -1,0 +1,94 @@
+﻿{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h1><i class="bi bi-file-bar-graph"></i> Fleet Reports</h1>
+        </div>
+        <div class="card-body">
+            <ul class="nav nav-tabs" id="reportTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="basic-tab" data-bs-toggle="tab" data-bs-target="#basic" type="button">
+                        Basic Lookup
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="advanced-tab" data-bs-toggle="tab" data-bs-target="#advanced" type="button">
+                        Advanced Reports
+                    </button>
+                </li>
+            </ul>
+            
+            <div class="tab-content mt-3" id="reportTabsContent">
+                <!-- Basic Lookup Tab -->
+                <div class="tab-pane fade show active" id="basic" role="tabpanel">
+                    <form method="POST" action="{{ url_for('generate_report') }}">
+                        <input type="hidden" name="report_type" value="basic">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Search Type</label>
+                                <select class="form-select" name="search_type" required>
+                                    <option value="plate">By Plate Number</option>
+                                    <option value="driver_name">By Driver Name</option>
+                                    <option value="driver_id">By Driver ID</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Identifier</label>
+                                <input type="text" class="form-control" name="identifier" required>
+                            </div>
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-search"></i> Search
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- Advanced Reports Tab -->
+                <div class="tab-pane fade" id="advanced" role="tabpanel">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">Assignment Summary</h5>
+                                    <p class="card-text">View vehicles by assignment type and status</p>
+                                    <a href="{{ url_for('assignment_summary_report') }}" class="btn btn-outline-primary">
+                                        Generate Report
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">Unassigned Vehicles</h5>
+                                    <p class="card-text">List of vehicles without active assignments</p>
+                                    <a href="{{ url_for('unassigned_vehicles_report') }}" class="btn btn-outline-primary">
+                                        Generate Report
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">Driver Assignments</h5>
+                                    <p class="card-text">List of drivers with their current assignments</p>
+                                    <a href="{{ url_for('driver_assignments_report') }}" class="btn btn-outline-primary">
+                                        Generate Report
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

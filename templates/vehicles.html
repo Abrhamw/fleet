@@ -1,0 +1,158 @@
+﻿{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1><i class="bi bi-car-front"></i> Vehicle Management</h1>
+        <a href="/vehicles" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> Add New Vehicle
+        </a>
+    </div>
+
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h5>Add New Vehicle</h5>
+        </div>
+        <div class="card-body">
+            <form method="POST">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Plate Number <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" name="plate_number" required placeholder="ABC123" maxlength="20">
+                        <small class="form-text text-muted">This will be the primary identifier for the vehicle</small>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Chasis Number <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" name="chasis" required>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <label class="form-label">Vehicle Type <span class="text-danger">*</span></label>
+                        <select class="form-select" name="vehicle_type" required>
+                            <option value="" disabled selected>Select Type</option>
+                            <option value="Pickup">Pickup</option>
+                            <option value="V8">V8</option>
+                            <option value="Hardtop">Hardtop</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <label class="form-label">Make</label>
+                        <input type="text" class="form-control" name="make">
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <label class="form-label">Model</label>
+                        <input type="text" class="form-control" name="model">
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <label class="form-label">Year</label>
+                        <input type="text" class="form-control" name="year" placeholder="YYYY" maxlength="4">
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <label class="form-label">Fuel Type <span class="text-danger">*</span></label>
+                        <select class="form-select" name="fuel_type" required>
+                            <option value="" disabled selected>Select Fuel</option>
+                            <option value="Diesel">Diesel</option>
+                            <option value="Benzin">Benzin</option>
+                            <option value="Hybrid">Hybrid</option>
+                            <option value="Electric">Electric</option>
+                        </select>
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <label class="form-label">Fuel Capacity (Ltrs)</label>
+                        <input type="number" step="0.1" class="form-control" name="fuel_capacity">
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <label class="form-label">Fuel Consumption (Km/Ltr)</label>
+                        <input type="number" step="0.1" class="form-control" name="fuel_consumption">
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label class="form-label">Loading Capacity</label>
+                        <input type="text" class="form-control" name="loading_capacity" placeholder="Persons + Quintals">
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label class="form-label">Assigned For <span class="text-danger">*</span></label>
+                        <select class="form-select" name="assigned_for" required>
+                            <option value="" disabled selected>Select Assignment</option>
+                            <option value="Project">Project</option>
+                            <option value="Region">Region</option>
+                            <option value="Center Office">Center Office</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-success">
+                            <i class="bi bi-save"></i> Save Vehicle
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card mt-4">
+        <div class="card-header bg-secondary text-white">
+            <h5>Vehicle List</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Plate Number</th>
+                            <th>Chasis</th>
+                            <th>Type</th>
+                            <th>Make/Model</th>
+                            <th>Year</th>
+                            <th>Fuel</th>
+                            <th>Assigned For</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for vehicle in vehicles %}
+                        <tr>
+                            <td><strong class="plate-badge">{{ vehicle.plate_number }}</strong></td>
+                            <td>{{ vehicle.chasis }}</td>
+                            <td>{{ vehicle.vehicle_type }}</td>
+                            <td>{{ vehicle.make }} {{ vehicle.model }}</td>
+                            <td>{{ vehicle.year }}</td>
+                            <td>{{ vehicle.fuel_type }}</td>
+                            <td>{{ vehicle.assigned_for }}</td>
+                            <td class="action-btns">
+                                <a href="/vehicles/{{ vehicle.plate_number }}" class="btn btn-sm btn-primary" title="Edit">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <a href="/compliance/{{ vehicle.plate_number }}" class="btn btn-sm btn-info" title="Compliance">
+                                    <i class="bi bi-clipboard-check"></i>
+                                </a>
+                                <a href="/maintenance/{{ vehicle.plate_number }}" class="btn btn-sm btn-warning" title="Maintenance">
+                                    <i class="bi bi-tools"></i>
+                                </a>
+                                <a href="/vehicles/delete/{{ vehicle.plate_number }}" class="btn btn-sm btn-danger" 
+                                   onclick="return confirm('Are you sure?')" title="Delete">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="8" class="text-center">No vehicles found</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

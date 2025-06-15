@@ -1,0 +1,91 @@
+﻿{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-12 text-center mb-4">
+            <h1><i class="bi bi-speedometer2"></i> Fleet Dashboard</h1>
+            <p class="lead">Manage your fleet operations efficiently</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card text-white bg-primary">
+                <div class="card-body text-center">
+                    <h5 class="card-title"><i class="bi bi-car-front"></i> Vehicles</h5>
+                    <h1>{{ vehicle_count }}</h1>
+                    <a href="/vehicles" class="btn btn-light">Manage Vehicles</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card text-white bg-success">
+                <div class="card-body text-center">
+                    <h5 class="card-title"><i class="bi bi-people"></i> Drivers</h5>
+                    <h1>{{ driver_count }}</h1>
+                    <a href="/drivers" class="btn btn-light">Manage Drivers</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card text-white bg-info">
+                <div class="card-body text-center">
+                    <h5 class="card-title"><i class="bi bi-clipboard-check"></i> Active Assignments</h5>
+                    <h1>{{ assignment_count }}</h1>
+                    <a href="/assignments" class="btn btn-light">View Assignments</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-warning text-white">
+                    <h5><i class="bi bi-exclamation-triangle"></i> Upcoming Maintenance</h5>
+                </div>
+                <div class="card-body">
+                    <div class="list-group">
+                        {% for record in maintenance_due %}
+                        <a href="/maintenance/{{ record[0] }}" class="list-group-item list-group-item-action">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h6 class="mb-1"><span class="badge bg-dark plate-badge">{{ record[0] }}</span> - {{ record[1] }} {{ record[2] }}</h6>
+                                <small>Due: {{ record[3] }}</small>
+                            </div>
+                            <small>{{ record[4] }}</small>
+                        </a>
+                        {% else %}
+                        <div class="list-group-item">No upcoming maintenance</div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-danger text-white">
+                    <h5><i class="bi bi-clipboard-x"></i> Compliance Issues</h5>
+                </div>
+                <div class="card-body">
+                    <div class="list-group">
+                        {% for record in compliance_issues %}
+                        <a href="/compliance/{{ record[0] }}" class="list-group-item list-group-item-action">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h6 class="mb-1"><span class="badge bg-dark plate-badge">{{ record[0] }}</span> - {{ record[1] }} {{ record[2] }}</h6>
+                                <span class="badge bg-danger">{{ record[3] }}</span>
+                            </div>
+                        </a>
+                        {% else %}
+                        <div class="list-group-item">No compliance issues</div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
