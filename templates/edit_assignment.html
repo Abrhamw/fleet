@@ -1,0 +1,78 @@
+﻿{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h1>Edit Assignment #{{ assignment.id }}</h1>
+        </div>
+        <div class="card-body">
+            <form method="POST">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Vehicle</label>
+                        <select class="form-select" name="plate_number" required>
+                            <option value="{{ assignment.plate_number }}" selected>
+                                {{ assignment.vehicle.plate_number }} - {{ assignment.vehicle.make }} {{ assignment.vehicle.model }}
+                            </option>
+                            {% for vehicle in vehicles %}
+                                {% if vehicle.plate_number != assignment.plate_number %}
+                                <option value="{{ vehicle.plate_number }}">{{ vehicle.plate_number }} - {{ vehicle.make }} {{ vehicle.model }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label class="form-label">Driver</label>
+                        <select class="form-select" name="driver_id" required>
+                            <option value="{{ assignment.driver_id }}" selected>
+                                {{ assignment.driver.name }} ({{ assignment.driver.id_number }})
+                            </option>
+                            {% for driver in drivers %}
+                                {% if driver.id != assignment.driver_id %}
+                                <option value="{{ driver.id }}">{{ driver.name }} ({{ driver.id_number }})</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div class="col-md-12">
+                        <label class="form-label">Work Place</label>
+                        <input type="text" class="form-control" name="work_place" value="{{ assignment.work_place }}" required>
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <label class="form-label">Start Date</label>
+                        <input type="date" class="form-control" name="start_date" value="{{ assignment.start_date }}" required>
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <label class="form-label">End Date</label>
+                        <input type="date" class="form-control" name="end_date" value="{{ assignment.end_date or '' }}">
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <label class="form-label">GPS Position</label>
+                        <input type="text" class="form-control" name="gps_position" value="{{ assignment.gps_position }}" placeholder="lat,long">
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <label class="form-label">Geofence Violations</label>
+                        <input type="number" class="form-control" name="geofence_violations" value="{{ assignment.geofence_violations }}">
+                    </div>
+                    
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-success">
+                            <i class="bi bi-save"></i> Update Assignment
+                        </button>
+                        <a href="/assignments" class="btn btn-secondary">
+                            <i class="bi bi-x-circle"></i> Cancel
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

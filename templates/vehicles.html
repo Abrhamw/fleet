@@ -1,0 +1,96 @@
+﻿<!-- Add before closing </body> -->
+<!-- Modal Template -->
+<div class="modal fade" id="formModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle">Form</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Content will be loaded here -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="modalSubmit">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Loading Spinner -->
+<div class="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center" id="loadingSpinner" style="background: rgba(0,0,0,0.5); z-index: 9999; display: none;">
+    <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;"></div>
+</div>
+
+<!-- JavaScript -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+$(document).ready(function() {
+    // Global function to load forms in modal
+    window.loadFormModal = function(title, url) {
+        $('#modalTitle').text(title);
+        $('#loadingSpinner').show();
+        
+        $('#modalBody').load(url, function() {
+            $('#loadingSpinner').hide();
+            $('#formModal').modal('show');
+            
+            // Initialize select2 if needed
+            if ($('.select2').length) {
+                $('.select2').select2({
+                    dropdownParent: $('#formModal')
+                });
+            }
+        });
+    };
+    
+    // Handle modal form submission
+    $('#modalSubmit').click(function() {
+        const form = $('#modalBody form');
+        if (form.length) {
+            form.submit();
+        }
+    });
+    
+    // AJAX form submission
+    $(document).on('submit', '#modalBody form', function(e) {
+        e.preventDefault();
+        const form = $(this);
+        const url = form.attr('action');
+        
+        $('#loadingSpinner').show();
+        
+        $.ajax({
+            type: form.attr('method') || 'POST',
+            url: url,
+            data: form.serialize(),
+            success: function(response) {
+                if (response.success) {
+                    $('#formModal').modal('hide');
+                    location.reload();
+                } else {
+                    $('#modalBody').html(response.form || response);
+                    if (response.errors) {
+                        // Display errors
+                        for (const field in response.errors) {
+                            $(`[name="${field}"]`).addClass('is-invalid');
+                            $(`#${field}_error`).remove();
+                            $(`[name="${field}"]`).after(
+                                `<div class="invalid-feedback" id="${field}_error">${response.errors[field]}</div>`
+                            );
+                        }
+                    }
+                }
+            },
+            error: function(xhr) {
+                alert('An error occurred: ' + xhr.responseText);
+            },
+            complete: function() {
+                $('#loadingSpinner').hide();
+            }
+        });
+    });
+});
+</script>

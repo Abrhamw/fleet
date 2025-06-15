@@ -1,0 +1,90 @@
+﻿{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h1>Maintenance: {{ vehicle.plate_number }}</h1>
+        </div>
+        <div class="card-body">
+            <form method="POST">
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <label class="form-label">Last Service KM</label>
+                        <input type="number" class="form-control" name="last_service_km" required>
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <label class="form-label">Last Service Date</label>
+                        <input type="date" class="form-control" name="last_service_date" required>
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <label class="form-label">Next Service KM</label>
+                        <input type="number" class="form-control" name="next_service_km" required>
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <label class="form-label">Next Service Date</label>
+                        <input type="date" class="form-control" name="next_service_date" required>
+                    </div>
+                    
+                    <div class="col-md-12">
+                        <label class="form-label">Maintenance Center</label>
+                        <select class="form-select" name="maintenance_center" required>
+                            <option value="" disabled selected>Select Center</option>
+                            <option value="EEP">EEP</option>
+                            <option value="Moenco">Moenco</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-success">
+                            <i class="bi bi-plus-circle"></i> Add Maintenance Record
+                        </button>
+                        <a href="/vehicles" class="btn btn-secondary">
+                            <i class="bi bi-x-circle"></i> Back to Vehicles
+                        </a>
+                    </div>
+                </div>
+            </form>
+            
+            <hr>
+            
+            <h3 class="mt-4">Maintenance History</h3>
+            {% if maintenance_records %}
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Last Service</th>
+                            <th>Next Service</th>
+                            <th>Center</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for record in maintenance_records %}
+                        <tr>
+                            <td>{{ record.last_service_date }} ({{ record.last_service_km }} km)</td>
+                            <td>{{ record.next_service_date }} ({{ record.next_service_km }} km)</td>
+                            <td>{{ record.maintenance_center }}</td>
+                            <td>
+                                <a href="/maintenance/delete/{{ record.id }}" class="btn btn-sm btn-danger" 
+                                   onclick="return confirm('Are you sure?')">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="alert alert-info">No maintenance records found</div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
